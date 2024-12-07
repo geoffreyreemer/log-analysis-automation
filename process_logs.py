@@ -29,6 +29,8 @@ LOG_FILE_PATH = os.getenv("LOG_FILE_PATH", "./error.log")
 MAX_LOG_SIZE = int(os.getenv("MAX_LOG_SIZE", 50000))
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o")
 USE_HTML_EMAIL = os.getenv("USE_HTML_EMAIL", "true").lower() == "true"
+ROTATE_LOG_FILE = os.getenv("ROTATE_LOG_FILE", "true").lower() == "true"
+CREATE_EMPTY_LOG_FILE = os.getenv("CREATE_EMPTY_LOG_FILE", "false").lower() == "true"
 
 # Step 1: Read the last `MAX_LOG_SIZE` characters of the log file
 def parse_logs(file_path: str, max_chars: int = 50000) -> str:
@@ -137,8 +139,10 @@ def rotate_log_file(log_file_path: str) -> None:
     try:
         os.rename(log_file_path, new_log_file_name)
         logging.info(f"Log file renamed to: {new_log_file_name}")
-        open(log_file_path, 'w').close()
-        logging.info(f"New empty log file created: {log_file_path}")
+        if CREATE_EMPTY_LOG_FILE:
+            # Create a new empty log file
+            open(log_file_path, 'w').close()
+            print(f"New empty log file created: {log_file_path}")
     except Exception as e:
         logging.error(f"Error rotating log file: {str(e)}")
 
@@ -158,8 +162,9 @@ def main():
     logging.info("Sending email summary...")
     send_email(summary, TO_EMAILS, LOG_FILE_PATH)
 
-    logging.info("Rotating log file...")
-    rotate_log_file(LOG_FILE_PATH)
+    if ROTATE_LOG_FILE:
+        print("Rotating log file...")
+        rotate_log_file(LOG_FILE_PATH)
 
 if __name__ == "__main__":
     main()
