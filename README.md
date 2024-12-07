@@ -1,5 +1,4 @@
-# Log Analysis Automation
-by Geoffrey Reemer
+# Daily Log Analysis Automation
 
 This Python script automates the process of analyzing log files, summarizing errors using OpenAI, and sending an email report with the analyzed logs attached. It can be used to identify and track issues in applications without the need to manually sift through large log files.
 
@@ -30,7 +29,7 @@ Before using this script, ensure you have:
 1. **Clone or Download the Repository**:
    - If you have Git installed, run:
      ```bash
-     git clone https://github.com/geoffreyreemer/log-analysis-automation.git
+     git clone https://github.com/your-username/log-analysis-automation.git
      cd log-analysis-automation
      ```
    - Alternatively, download the ZIP file and extract it.
@@ -59,10 +58,12 @@ Before using this script, ensure you have:
      MAX_LOG_SIZE=50000
      OPENAI_MODEL=gpt-4
      USE_HTML_EMAIL=true
+     ROTATE_LOG_FILE=true
+     CREATE_EMPTY_LOG_FILE=false
      ```
 
-4. **Create the Log File**:
-   - Ensure the log file specified in `LOG_FILE_PATH` exists:
+4. **Create the Log File (If Required)**:
+   - If `CREATE_EMPTY_LOG_FILE` is set to `true`, ensure the log file specified in `LOG_FILE_PATH` exists:
      ```bash
      touch error.log
      ```
@@ -82,7 +83,7 @@ To run the script:
 The script will:
 - Analyze the logs in the file specified by `LOG_FILE_PATH`.
 - Send an email summary with the processed logs attached.
-- Rotate the processed log file and create a new empty log file.
+- Optionally rotate the processed log file (based on `ROTATE_LOG_FILE`) and create a new empty log file (based on `CREATE_EMPTY_LOG_FILE`).
 
 ---
 
@@ -180,19 +181,21 @@ You can set up this script to run automatically at regular intervals using cron 
 
 ### Environment Variables
 
-| Variable        | Description                                                                 | Default Value             |
-|------------------|-----------------------------------------------------------------------------|---------------------------|
-| `OPENAI_API_KEY` | OpenAI API key for accessing GPT models.                                   | None (required)           |
-| `SMTP_SERVER`    | SMTP server address (e.g., `smtp.gmail.com`).                              | None (required)           |
-| `SMTP_PORT`      | SMTP port (usually `587` for TLS or `465` for SSL).                        | `587`                     |
-| `SMTP_USERNAME`  | Username for the SMTP server (usually your email address).                 | None (required)           |
-| `SMTP_PASSWORD`  | Password for the SMTP server.                                              | None (required)           |
-| `FROM_EMAIL`     | The email address shown in the "From" field of the sent email.             | None (required)           |
-| `TO_EMAILS`      | Comma-separated list of recipient email addresses.                         | None (required)           |
-| `LOG_FILE_PATH`  | Path to the log file to be analyzed.                                       | `./error.log`             |
-| `MAX_LOG_SIZE`   | Number of characters to read from the end of the log file.                 | `50000`                   |
-| `OPENAI_MODEL`   | The OpenAI model to use (e.g., `gpt-4`, `gpt-4o`).                         | `gpt-4`                   |
-| `USE_HTML_EMAIL` | Whether to send email as HTML (`true`) or plain text (`false`).            | `true`                    |
+| Variable               | Description                                                                 | Default Value             |
+|-------------------------|-----------------------------------------------------------------------------|---------------------------|
+| `OPENAI_API_KEY`        | OpenAI API key for accessing GPT models.                                   | None (required)           |
+| `SMTP_SERVER`           | SMTP server address (e.g., `smtp.gmail.com`).                              | None (required)           |
+| `SMTP_PORT`             | SMTP port (usually `587` for TLS or `465` for SSL).                        | `587`                     |
+| `SMTP_USERNAME`         | Username for the SMTP server (usually your email address).                 | None (required)           |
+| `SMTP_PASSWORD`         | Password for the SMTP server.                                              | None (required)           |
+| `FROM_EMAIL`            | The email address shown in the "From" field of the sent email.             | None (required)           |
+| `TO_EMAILS`             | Comma-separated list of recipient email addresses.                         | None (required)           |
+| `LOG_FILE_PATH`         | Path to the log file to be analyzed.                                       | `./error.log`             |
+| `MAX_LOG_SIZE`          | Number of characters to read from the end of the log file.                 | `50000`                   |
+| `OPENAI_MODEL`          | The OpenAI model to use (e.g., `gpt-4`, `gpt-4o`).                         | `gpt-4`                   |
+| `USE_HTML_EMAIL`        | Whether to send email as HTML (`true`) or plain text (`false`).            | `true`                    |
+| `ROTATE_LOG_FILE`       | Whether to rotate the log file after processing (`true` or `false`).       | `true`                    |
+| `CREATE_EMPTY_LOG_FILE` | Whether to create a new empty log file after processing (`true` or `false`).| `false`                   |
 
 ---
 
@@ -217,3 +220,4 @@ If you encounter any issues or have suggestions for improvements, feel free to o
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
